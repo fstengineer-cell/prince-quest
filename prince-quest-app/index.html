@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Prince Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        /* CSS ชุดสีพาสเทล */
+        :root {
+            --bg-gradient-start: #fdfbfb; --bg-gradient-end: #ebedee;
+            --container-bg: #fff5f7; --container-border: #ffd1dc;
+            --accent-yellow: #fdfd96; --accent-peach: #ffcaaf;
+            --text-dark: #6b5b65; --btn-good-bg: #b7e4c7;
+            --btn-good-shadow: #95d5b2; --btn-bad-bg: #ffb3c1;
+            --btn-bad-shadow: #ff8fa3; --path-color: #fae3d9;
+        }
+        body { font-family: 'Fredoka One', cursive, sans-serif; background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text-dark); box-sizing: border-box; }
+        .container { width: 100%; max-width: 450px; background: var(--container-bg); padding: 25px; border-radius: 30px; box-shadow: 0 10px 25px rgba(107, 91, 101, 0.1), 0 0 0 8px var(--container-border), inset 0 0 20px rgba(255, 255, 255, 0.5); text-align: center; position: relative; overflow: hidden; border: 3px solid white; padding-bottom: 40px; }
+        h1 { margin: 0 0 20px 0; font-size: 1.6rem; color: var(--text-dark); text-shadow: 2px 2px 0px #fff, 0 0 10px var(--accent-peach); }
+        .score-board { background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px auto; border: 6px solid var(--accent-yellow); box-shadow: 0 0 25px var(--accent-yellow), inset 0 0 10px white; animation: pulsePastel 2s infinite alternate; color: var(--text-dark); }
+        .star-display-num { font-size: 4rem; font-weight: bold; text-shadow: 2px 2px 0 #fff; line-height: 1; }
+        .journey-track-container { position: relative; height: 140px; background: linear-gradient(to bottom, #d4fcff, #eefcff); border-radius: 20px; margin-bottom: 25px; border: 4px solid white; box-shadow: inset 0 0 15px rgba(180, 220, 255, 0.4); overflow: hidden; }
+        .track-path { position: absolute; bottom: 10px; left: 0; width: 100%; height: 45px; background: var(--path-color); border-top: 4px dotted rgba(255,255,255,0.8); border-bottom: 4px solid rgba(255,240,240,0.5); border-radius: 20px; }
+        .princess-end { position: absolute; right: 10px; bottom: 15px; height: 95px; width: auto; z-index: 1; filter: drop-shadow(0 4px 4px rgba(255,255,255,0.8)); }
+        .rider-container { position: absolute; bottom: 20px; left: 0; transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 2; display: flex; flex-direction: column; align-items: center; width: auto; }
+        .prince-rider-img { height: 95px; width: auto; filter: drop-shadow(0 4px 4px rgba(255,255,255,0.8)); margin-bottom: -8px; }
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        button.action-btn { flex: 1; padding: 15px; border: 4px solid white; border-radius: 25px; font-family: 'Fredoka One', cursive; font-size: 1.3rem; cursor: pointer; color: var(--text-dark); transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; text-shadow: 1px 1px 0 rgba(255,255,255,0.5); position: relative; overflow: hidden; }
+        button.action-btn::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%; background: rgba(255,255,255,0.4); border-radius: 25px 25px 10px 10px; pointer-events: none; }
+        button.action-btn:active { transform: scale(0.95); }
+        .btn-good { background: var(--btn-good-bg); box-shadow: 0 6px 0 var(--btn-good-shadow); }
+        .btn-bad { background: var(--btn-bad-bg); box-shadow: 0 6px 0 var(--btn-bad-shadow); }
+        .history { margin-top: 30px; text-align: left; width: 100%; background: rgba(255,255,255,0.8); color: var(--text-dark); padding: 15px; border-radius: 20px; box-sizing: border-box; border: 3px solid var(--container-border); margin-bottom: 20px; }
+        .history h3 { margin-top: 0; font-size: 1.1rem; border-bottom: 2px dashed var(--container-border); padding-bottom: 8px; text-align: center; }
+        #logList { list-style: none; padding: 0; font-size: 0.9rem; max-height: 120px; overflow-y: auto; }
+        #logList li { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; }
+        .positive { color: #74c69d; font-weight: bold; }
+        .negative { color: #ff8fa3; font-weight: bold; }
+        .goal-setting-area { background: rgba(255,255,255,0.5); padding: 15px; border-radius: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; border: 2px solid var(--container-border); width: 90%; margin: 0 auto; }
+        .goal-label { font-size: 1rem; color: var(--text-dark); }
+        #goalInput { width: 60px; padding: 5px; border-radius: 10px; border: 3px solid var(--accent-peach); background: #fff; text-align: center; font-family: 'Fredoka One', sans-serif; font-size: 1.1rem; color: var(--text-dark); outline: none; }
+        .goal-set-btn { padding: 8px 15px; border-radius: 10px; border: none; background: var(--accent-peach); color: white; font-family: 'Fredoka One', sans-serif; cursor: pointer; box-shadow: 0 4px 0 #e0b098; }
+        .goal-set-btn:active { transform: scale(0.95); box-shadow: 0 2px 0 #e0b098; }
+        .reset-btn { margin-top: 25px; background: rgba(255,255,255,0.5); color: var(--text-dark); border: 2px solid var(--container-border); padding: 10px 20px; font-size: 0.9rem; cursor: pointer; border-radius: 15px; }
+        @keyframes pulsePastel { from { box-shadow: 0 0 15px var(--accent-yellow), inset 0 0 5px white; } to { box-shadow: 0 0 35px var(--accent-yellow), 0 0 15px var(--accent-peach), inset 0 0 15px white; } }
+        #celebrationOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 240, 245, 0.95); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--text-dark); text-align: center; }
+        .crown-animate { font-size: 8rem; margin-bottom: 20px; animation: floatCrown 3s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--accent-yellow)); }
+        @keyframes floatCrown { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
+        .celebrate-text { font-size: 2.5rem; color: var(--text-dark); text-shadow: 2px 2px 0 #fff; margin-bottom: 30px; }
+        .firework { position: absolute; width: 15px; height: 15px; border-radius: 50%; animation: explode 1s ease-out forwards; opacity: 0; }
+        @keyframes explode { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(15); opacity: 0; } }
+        
+        #status-indicator { font-size: 0.8rem; color: #999; margin-top: 5px; }
+        .connected { color: #2ecc71 !important; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ ภารกิจรัก (Prince Quest) ✨</h1>
+        <div id="status-indicator">กำลังเชื่อมต่อ...</div>
+        
+        <div class="score-board">
+            <span id="score" class="star-display-num">0</span> 
+        </div>
+        
+        <div class="journey-track-container">
+            <div class="track-path"></div>
+            <img src="princess.png" alt="เจ้าหญิง" class="princess-end">
+            <div class="rider-container" id="riderContainer">
+                <img src="prince.png" alt="เจ้าชายขี่ม้า" class="prince-rider-img">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="action-btn btn-good" onclick="updateScoreDB(1)">
+                <span>💖</span> เดินหน้า!
+            </button>
+            <button class="action-btn btn-bad" onclick="updateScoreDB(-1)">
+                <span>💧</span> ถอยหลัง
+            </button>
+        </div>
+
+        <div class="history">
+            <h3>สมุดบันทึก (Sync)</h3>
+            <ul id="logList"></ul>
+        </div>
+        
+        <div class="goal-setting-area">
+            <label for="goalInput" class="goal-label">เป้าหมาย:</label>
+            <input type="number" id="goalInput" value="10" min="1">
+            <button class="goal-set-btn" onclick="changeGoalTargetDB()">ตั้งค่าใหม่</button>
+        </div>
+
+        <button class="reset-btn" onclick="resetDataDB()">🔄 เริ่มต้นใหม่ทั้งหมด</button>
+    </div>
+
+    <div id="celebrationOverlay" onclick="closeCelebration()">
+        <div class="crown-animate">👑</div>
+        <div class="celebrate-text">ยินดีด้วย!<br>พบเจ้าหญิงแล้ว!</div>
+        <p style="font-size: 1.2rem;">แตะที่หน้าจอเพื่อปิด</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        // ======================================================
+        // การตั้งค่า Firebase Project: prince-quest
+        // ======================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0MkthTQLFB75D2AZa-uSYWiN66F5f6MQ",
+            authDomain: "prince-quest.firebaseapp.com",
+            databaseURL: "https://prince-quest-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "prince-quest",
+            storageBucket: "prince-quest.firebasestorage.app",
+            messagingSenderId: "92529059042",
+            appId: "1:92529059042:web:4755951b31af612f086abb",
+            measurementId: "G-K9KYSPSS97"
+        };
+        // ======================================================
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        const dbRef = db.ref('loveQuest'); 
+
+        let score = 0;
+        let GOAL = 10;
+        let logs = [];
+
+        // --- รับข้อมูล (Listen) ---
+        dbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            
+            if (data) {
+                score = data.score || 0;
+                GOAL = data.goal || 10;
+                logs = data.logs || [];
+                
+                updateDisplay();
+                renderLogs();
+                document.getElementById('goalInput').value = GOAL;
+                checkGoal();
+                
+                const status = document.getElementById('status-indicator');
+                status.innerText = "🟢 ออนไลน์ (prince-quest)";
+                status.classList.add('connected');
+            } else {
+                dbRef.set({ score: 0, goal: 10, logs: [] });
+            }
+        });
+
+        // --- ส่งข้อมูล (Write) ---
+        function updateScoreDB(value) {
+            let newScore = score + value;
+            if (newScore < 0) newScore = 0;
+
+            const timestamp = new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+            const actionText = value > 0 ? "เข้าใกล้ขึ้น" : "ถอยห่างออกไป";
+            
+            const newLog = { time: timestamp, action: actionText, val: value };
+            let newLogs = [newLog, ...logs];
+            if(newLogs.length > 20) newLogs.pop();
+
+            dbRef.update({
+                score: newScore,
+                logs: newLogs
+            });
+        }
+
+        function changeGoalTargetDB() {
+            const inputVal = document.getElementById('goalInput').value;
+            const newGoal = parseInt(inputVal);
+            
+            if(newGoal && newGoal > 0) {
+                if(confirm("ตั้งค่าใหม่: คะแนนจะถูกรีเซ็ตเป็น 0 ยืนยันไหม?")) {
+                    const timestamp = new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+                    dbRef.set({
+                        score: 0,
+                        goal: newGoal,
+                        logs: [{ time: timestamp, action: "ตั้งเป้าหมายใหม่", val: 0 }]
+                    });
+                }
+            } else {
+                alert("ต้องมากกว่า 0");
+            }
+        }
+
+        function resetDataDB() {
+            if(confirm("ล้างข้อมูลทั้งหมดและเริ่มใหม่?")) {
+                dbRef.set({
+                    score: 0,
+                    goal: 10,
+                    logs: []
+                });
+            }
+        }
+
+        // --- แสดงผล ---
+        function updateDisplay() {
+            document.getElementById('score').innerText = score;
+            const rider = document.getElementById('riderContainer');
+            
+            // สูตรคำนวณตำแหน่ง
+            let safeDistancePixel = 110; 
+            let progressRatio = score / GOAL;
+            if (progressRatio > 1) progressRatio = 1;
+            if (progressRatio < 0) progressRatio = 0;
+            rider.style.left = `calc((100% - ${safeDistancePixel}px) * ${progressRatio})`;
+        }
+
+        function renderLogs() {
+            const list = document.getElementById('logList');
+            list.innerHTML = "";
+            logs.forEach(log => {
+                const li = document.createElement('li');
+                if(log.val === 0) {
+                    li.innerHTML = `<span>🚩 ${log.time} - ${log.action}</span> <span style="color:#aaa;">--</span>`;
+                } else {
+                    const sign = log.val > 0 ? "+" : "";
+                    const colorClass = log.val > 0 ? "positive" : "negative";
+                    const icon = log.val > 0 ? "🌸" : "☁️";
+                    li.innerHTML = `<span>${icon} ${log.time} - ${log.action}</span> <span class="${colorClass}">${sign}${log.val}</span>`;
+                }
+                list.appendChild(li);
+            });
+        }
+
+        function checkGoal() {
+            if(score >= GOAL && score > 0) {
+                if(document.getElementById('celebrationOverlay').style.display !== 'flex') {
+                    showCelebration();
+                }
+            }
+        }
+
+        // Celebration
+        let fireworkInterval;
+        function showCelebration() {
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.style.display = 'flex';
+            for(let i=0; i<5; i++) { createFirework(); }
+            fireworkInterval = setInterval(() => { createFirework(); }, 800);
+        }
+        function closeCelebration() {
+            document.getElementById('celebrationOverlay').style.display = 'none';
+            clearInterval(fireworkInterval);
+            document.querySelectorAll('.firework').forEach(fw => fw.remove());
+        }
+        function createFirework() {
+            const overlay = document.getElementById('celebrationOverlay');
+            const fw = document.createElement('div');
+            fw.classList.add('firework');
+            fw.style.left = Math.random() * 80 + 10 + '%';
+            fw.style.top = Math.random() * 60 + 10 + '%';
+            const colors = ['#fdfd96', '#ffb3c1', '#b7e4c7', '#a2d2ff', '#ffcaaf'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            fw.style.backgroundColor = randomColor;
+            fw.style.boxShadow = `0 0 20px 5px rgba(255,255,255,0.8)`;
+            overlay.appendChild(fw);
+            setTimeout(() => { fw.remove(); }, 1000);
+        }
+    </script>
+</body>
+</html>
