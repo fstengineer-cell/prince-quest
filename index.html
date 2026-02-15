@@ -3,325 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Prince & Princess Quest</title>
+    <title>Super Star Kids (Celeb)</title>
     
     <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="icon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icon.png">
     <link rel="manifest" href="manifest.json">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#fff5f7">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Prompt:wght@300;500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#85d8ce">
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Kanit:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
+        /* 🎨 THEME */
         :root {
-            --bg-gradient-start: #fdfbfb; --bg-gradient-end: #ebedee;
-            --container-bg: #fff5f7; --container-border: #ffd1dc;
-            --accent-yellow: #fdfd96; --accent-peach: #ffcaaf;
-            --text-dark: #6b5b65; --btn-good-bg: #b7e4c7;
-            --btn-good-shadow: #95d5b2; --btn-bad-bg: #ffb3c1;
-            --btn-bad-shadow: #ff8fa3; --path-color: #fae3d9;
+            --ongtong-color: #ff85a2; 
+            --angtang-color: #4facfe; 
+            --gold: #FFD700;
         }
-        body { font-family: 'Prompt', 'Fredoka One', sans-serif; background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: var(--text-dark); box-sizing: border-box; }
-        .container { width: 100%; max-width: 450px; background: var(--container-bg); padding: 25px; border-radius: 30px; box-shadow: 0 10px 25px rgba(107, 91, 101, 0.1), 0 0 0 8px var(--container-border), inset 0 0 20px rgba(255, 255, 255, 0.5); text-align: center; position: relative; overflow: hidden; border: 3px solid white; padding-bottom: 40px; }
-        
-        /* Header & User Switch */
-        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        h1 { margin: 0; font-size: 1.4rem; color: var(--text-dark); text-shadow: 2px 2px 0px #fff; flex-grow: 1; text-align: left; }
-        .switch-user-btn { background: #fff; border: 2px solid var(--container-border); border-radius: 15px; padding: 5px 10px; font-size: 0.8rem; cursor: pointer; color: var(--text-dark); font-family: 'Prompt', sans-serif; }
 
-        .score-board { background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 120px; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto 20px auto; border: 6px solid var(--accent-yellow); box-shadow: 0 0 25px var(--accent-yellow), inset 0 0 10px white; animation: pulsePastel 2s infinite alternate; color: var(--text-dark); }
-        .star-display-num { font-size: 4rem; font-weight: bold; text-shadow: 2px 2px 0 #fff; line-height: 1; font-family: 'Fredoka One', cursive; }
-        
-        .journey-track-container { position: relative; height: 140px; background: linear-gradient(to bottom, #d4fcff, #eefcff); border-radius: 20px; margin-bottom: 25px; border: 4px solid white; box-shadow: inset 0 0 15px rgba(180, 220, 255, 0.4); overflow: hidden; }
-        .track-path { position: absolute; bottom: 10px; left: 0; width: 100%; height: 45px; background: var(--path-color); border-top: 4px dotted rgba(255,255,255,0.8); border-bottom: 4px solid rgba(255,240,240,0.5); border-radius: 20px; }
-        
-        /* Images */
-        .goal-img { position: absolute; right: 10px; bottom: 15px; height: 95px; width: auto; z-index: 1; filter: drop-shadow(0 4px 4px rgba(255,255,255,0.8)); transition: all 0.5s ease; }
-        .rider-container { position: absolute; bottom: 20px; left: 0; transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 2; display: flex; flex-direction: column; align-items: center; width: auto; }
-        .rider-img { height: 95px; width: auto; filter: drop-shadow(0 4px 4px rgba(255,255,255,0.8)); margin-bottom: -8px; }
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            margin: 0; padding: 15px; 
+            min-height: 100vh; box-sizing: border-box;
+            user-select: none; -webkit-user-select: none;
+            overflow-x: hidden;
+        }
 
-        .btn-group { display: flex; gap: 15px; margin-top: 20px; }
-        button.action-btn { flex: 1; padding: 15px; border: 4px solid white; border-radius: 25px; font-family: 'Prompt', sans-serif; font-weight: bold; font-size: 1.2rem; cursor: pointer; color: var(--text-dark); transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; text-shadow: 1px 1px 0 rgba(255,255,255,0.5); position: relative; overflow: hidden; }
-        button.action-btn::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 40%; background: rgba(255,255,255,0.4); border-radius: 25px 25px 10px 10px; pointer-events: none; }
-        button.action-btn:active { transform: scale(0.95); }
-        .btn-good { background: var(--btn-good-bg); box-shadow: 0 6px 0 var(--btn-good-shadow); }
-        .btn-bad { background: var(--btn-bad-bg); box-shadow: 0 6px 0 var(--btn-bad-shadow); }
-        
-        .history { margin-top: 30px; text-align: left; width: 100%; background: rgba(255,255,255,0.8); color: var(--text-dark); padding: 15px; border-radius: 20px; box-sizing: border-box; border: 3px solid var(--container-border); margin-bottom: 20px; }
-        .history h3 { margin-top: 0; font-size: 1rem; border-bottom: 2px dashed var(--container-border); padding-bottom: 8px; text-align: center; }
-        #logList { list-style: none; padding: 0; font-size: 0.9rem; max-height: 120px; overflow-y: auto; }
-        #logList li { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; }
-        .positive { color: #74c69d; font-weight: bold; }
-        .negative { color: #ff8fa3; font-weight: bold; }
-        
-        .goal-setting-area { background: rgba(255,255,255,0.5); padding: 15px; border-radius: 15px; display: flex; justify-content: center; align-items: center; gap: 10px; border: 2px solid var(--container-border); width: 90%; margin: 0 auto; }
-        .goal-label { font-size: 1rem; color: var(--text-dark); }
-        #goalInput { width: 60px; padding: 5px; border-radius: 10px; border: 3px solid var(--accent-peach); background: #fff; text-align: center; font-family: 'Fredoka One', sans-serif; font-size: 1.1rem; color: var(--text-dark); outline: none; }
-        .goal-set-btn { padding: 8px 15px; border-radius: 10px; border: none; background: var(--accent-peach); color: white; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 0 #e0b098; }
-        .reset-btn { margin-top: 25px; background: rgba(255,255,255,0.5); color: var(--text-dark); border: 2px solid var(--container-border); padding: 10px 20px; font-size: 0.9rem; cursor: pointer; border-radius: 15px; }
+        .container { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
 
-        /* User Selection Overlay */
-        #userSelectOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #fdfbfb 0%, #ffeef2 100%); z-index: 200; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .user-select-card { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 350px; border: 4px solid #fff; outline: 4px solid var(--container-border); }
-        .user-btn { width: 100%; margin: 10px 0; padding: 15px; border-radius: 20px; border: none; font-size: 1.2rem; cursor: pointer; font-family: 'Prompt', sans-serif; font-weight: bold; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .user-btn:active { transform: scale(0.95); }
-        .btn-angtang { background: #b7e4c7; color: #2d6a4f; box-shadow: 0 5px 0 #95d5b2; }
-        .btn-ongtong { background: #ffb3c1; color: #a4133c; box-shadow: 0 5px 0 #ff8fa3; }
+        h1 { 
+            text-align: center; margin-bottom: 20px; 
+            font-family: 'Fredoka One', cursive; color: #fff; 
+            font-size: 2.2rem; text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        /* --- DASHBOARD --- */
+        #dashboard-view { display: block; }
+
+        .character-card {
+            background: white; border-radius: 25px; padding: 15px; margin-bottom: 20px;
+            border-bottom: 6px solid rgba(0,0,0,0.1); cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
+            transition: transform 0.1s;
+        }
+        .character-card:active { transform: translateY(4px); border-bottom-width: 2px; }
+
+        .card-ongtong { border: 3px solid var(--ongtong-color); border-bottom-color: #e06d88; }
+        .card-angtang { border: 3px solid var(--angtang-color); border-bottom-color: #3b8bc2; }
+
+        .avatar { font-size: 3.5rem; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        .card-info { flex-grow: 1; }
+        .card-name { font-size: 1.4rem; font-weight: 800; color: #555; }
+        
+        /* พื้นที่แสดงดาวใน Dashboard */
+        .dashboard-stars {
+            color: var(--gold); font-size: 1.2rem; line-height: 1.2;
+            margin-top: 5px; word-break: break-all; text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+            min-height: 25px;
+        }
+        .empty-star-text { color: #ccc; font-size: 0.8rem; font-weight: normal; }
+
+        /* --- TRACKER --- */
+        #tracker-view { display: none; }
+
+        .nav-header { display: flex; align-items: center; margin-bottom: 15px; }
+        .back-btn { background: white; border: none; font-size: 1.8rem; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.1); }
+        .big-profile-name { flex-grow: 1; text-align: center; font-size: 2rem; font-weight: 900; color: white; text-shadow: 2px 2px 0 rgba(0,0,0,0.1); }
+
+        .star-board {
+            background: rgba(255,255,255,0.95); border-radius: 30px; padding: 20px;
+            min-height: 200px; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start;
+            gap: 10px; border: 4px solid #fff; margin-bottom: 20px;
+        }
+
+        .star-hole {
+            width: 55px; height: 55px; background: #f0f0f0; border-radius: 50%;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .star-fill {
+            font-size: 2.8rem; display: none; filter: drop-shadow(0 4px 0 rgba(0,0,0,0.2));
+        }
+        .star-fill.pop { display: block; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1.2); } }
+
+        .big-controls { display: flex; gap: 10px; }
+        .game-btn {
+            flex: 1; padding: 15px; border-radius: 20px; border: none;
+            font-family: 'Kanit'; font-size: 1.3rem; font-weight: 800; color: white;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.2); cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .game-btn:active { transform: translateY(4px); }
+        .btn-yay { background: #2ecc71; box-shadow: 0 6px 0 #27ae60; }
+        .btn-oops { background: #e74c3c; box-shadow: 0 6px 0 #c0392b; flex: 0.4; font-size: 1rem;}
+
+        .settings-bar {
+            margin-top: 25px; padding-top: 15px; border-top: 2px dashed rgba(255,255,255,0.3);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .reset-single-btn {
+            background: rgba(255,255,255,0.3); border: 1px solid white; color: white;
+            padding: 8px 15px; border-radius: 15px; font-size: 0.8rem; cursor: pointer;
+        }
 
         /* Celebration */
-        #celebrationOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 240, 245, 0.95); z-index: 100; display: none; flex-direction: column; justify-content: center; align-items: center; color: var(--text-dark); text-align: center; }
-        .crown-animate { font-size: 8rem; margin-bottom: 20px; animation: floatCrown 3s ease-in-out infinite; filter: drop-shadow(0 0 20px var(--accent-yellow)); }
-        @keyframes floatCrown { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
-        .celebrate-text { font-size: 2rem; color: var(--text-dark); text-shadow: 2px 2px 0 #fff; margin-bottom: 30px; font-family: 'Prompt', sans-serif; }
-        .firework { position: absolute; width: 15px; height: 15px; border-radius: 50%; animation: explode 1s ease-out forwards; opacity: 0; }
-        @keyframes explode { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(15); opacity: 0; } }
+        #win-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 999; display: none;
+            flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .win-title { font-size: 4rem; color: var(--gold); font-family: 'Fredoka One'; animation: bounce 1s infinite; }
+        
+        /* Confetti Canvas */
+        #confetti-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; }
 
     </style>
 </head>
 <body>
 
-    <div id="userSelectOverlay">
-        <div class="user-select-card">
-            <h2 style="color:var(--text-dark); margin-top:0;">ใครจะเล่นเอ่ย?</h2>
-            <button class="user-btn btn-angtang" onclick="selectUser('angtang')">
-                👦 น้องแองแตง
-            </button>
-            <button class="user-btn btn-ongtong" onclick="selectUser('ongtong')">
-                👧 น้องอองตอง
-            </button>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="header-area">
-            <h1 id="userTitle">กำลังเล่น...</h1>
-            <button class="switch-user-btn" onclick="showUserSelect()">👤 เปลี่ยนคน</button>
-        </div>
         
-        <div class="score-board">
-            <span id="score" class="star-display-num">0</span> 
+        <div id="dashboard-view">
+            <h1>🚀 Super Star Kids</h1>
+            <div id="dashboard-list"></div>
         </div>
-        
-        <div class="journey-track-container">
-            <div class="track-path"></div>
-            <img src="" alt="เป้าหมาย" id="goalImg" class="goal-img">
-            <div class="rider-container" id="riderContainer">
-                <img src="" alt="คนขี่ม้า" id="riderImg" class="rider-img">
+
+        <div id="tracker-view">
+            <div class="nav-header">
+                <button class="back-btn" onclick="goHome()">🏠</button>
+                <div class="big-profile-name" id="kid-name-display">Name</div>
+                <div style="width: 45px;"></div>
+            </div>
+
+            <div class="star-board" id="star-board"></div>
+
+            <div class="big-controls">
+                <button class="game-btn btn-oops" onclick="adjustStar(-1)">
+                    👎 หักดาว
+                </button>
+                <button class="game-btn btn-yay" onclick="adjustStar(1)">
+                    ⭐ เพิ่มดาว!
+                </button>
+            </div>
+
+            <div class="settings-bar">
+                <div>
+                    <span style="color:white; font-size:0.9rem;">เป้าหมาย: </span>
+                    <input type="number" id="goal-input" style="width:40px; text-align:center; border-radius:8px; border:none; padding:5px;" value="10">
+                    <button onclick="saveNewGoal()" style="background:white; border:none; padding:5px 8px; border-radius:8px; cursor:pointer;">💾</button>
+                </div>
+                <button class="reset-single-btn" onclick="resetCurrentKid()">
+                    🔄 เริ่มสะสมใหม่
+                </button>
             </div>
         </div>
 
-        <div class="btn-group">
-            <button class="action-btn btn-good" onclick="updateScore(1)">
-                <span>💖</span> เดินหน้า
-            </button>
-            <button class="action-btn btn-bad" onclick="updateScore(-1)">
-                <span>💧</span> ถอยหลัง
-            </button>
-        </div>
-
-        <div class="history">
-            <h3 id="historyTitle">สมุดบันทึก</h3>
-            <ul id="logList"></ul>
-        </div>
-        
-        <div class="goal-setting-area">
-            <label for="goalInput" class="goal-label">เป้าหมาย:</label>
-            <input type="number" id="goalInput" value="10" min="1">
-            <button class="goal-set-btn" onclick="changeGoalTarget()">ตั้งค่าใหม่</button>
-        </div>
-
-        <button class="reset-btn" onclick="resetData()">🔄 เริ่มต้นใหม่ทั้งหมด</button>
     </div>
 
-    <div id="celebrationOverlay" onclick="closeCelebration()">
-        <div class="crown-animate">👑</div>
-        <div class="celebrate-text" id="celebrateMsg">ยินดีด้วย!</div>
-        <p style="font-size: 1rem; font-family: 'Prompt', sans-serif;">แตะที่หน้าจอเพื่อปิด</p>
+    <div id="win-modal" onclick="closeWin()">
+        <div class="win-title">YOU WIN!</div>
+        <div style="font-size: 5rem; margin: 20px;">🏆</div>
+        <div style="color: white; font-size: 1.5rem;">เก่งมากๆ เลย!</div>
+        <div style="color: #bbb; margin-top: 20px; font-size: 0.9rem;">(แตะเพื่อปิด)</div>
     </div>
+    
+    <canvas id="confetti-canvas"></canvas>
 
     <script>
-        // ข้อมูลผู้เล่น
-        const USERS = {
-            'angtang': {
-                name: 'น้องแองแตง',
-                storageKey: 'questData_Angtang',
-                rider: 'prince.png',   // เจ้าชาย
-                goal: 'princess.png',  // เจ้าหญิง
-                winMsg: 'พบเจ้าหญิงแล้ว!',
-                themeColor: '#e3f2fd'
-            },
-            'ongtong': {
-                name: 'น้องอองตอง',
-                storageKey: 'questData_Ongtong',
-                rider: 'princess.png', // เจ้าหญิง
-                goal: 'prince.png',    // เจ้าชาย
-                winMsg: 'พบเจ้าชายแล้ว!',
-                themeColor: '#fff5f7'
-            }
-        };
-
-        let currentUser = null;
-        let gameState = { score: 0, goal: 10, logs: [] };
-
-        // เริ่มต้น: ตรวจสอบว่าเคยเลือกใครไว้ไหม
-        window.onload = function() {
-            const lastUser = localStorage.getItem('questLastUser');
-            if (lastUser && USERS[lastUser]) {
-                selectUser(lastUser);
-            } else {
-                showUserSelect();
-            }
-        };
-
-        function showUserSelect() {
-            document.getElementById('userSelectOverlay').style.display = 'flex';
-        }
-
-        function selectUser(userKey) {
-            currentUser = USERS[userKey];
-            localStorage.setItem('questLastUser', userKey); // จำคนล่าสุด
-            document.getElementById('userSelectOverlay').style.display = 'none';
+        // --- 🎵 SOUND SYSTEM (Web Audio API) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playTone(freq, type, duration, startTime = 0) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
             
-            // เปลี่ยนหน้าตาตาม user
-            document.getElementById('userTitle').innerText = `✨ ${currentUser.name} ✨`;
-            document.getElementById('riderImg').src = currentUser.rider;
-            document.getElementById('goalImg').src = currentUser.goal;
-            document.querySelector('.container').style.backgroundColor = currentUser.themeColor;
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
             
-            // โหลดข้อมูลของคนนั้น
-            loadData();
+            // Fade out effect
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime + startTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startTime + duration);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start(audioCtx.currentTime + startTime);
+            osc.stop(audioCtx.currentTime + startTime + duration);
         }
 
-        // โหลดข้อมูล (แยก key ตาม user)
-        function loadData() {
-            const saved = localStorage.getItem(currentUser.storageKey);
-            if (saved) {
-                gameState = JSON.parse(saved);
-            } else {
-                // ถ้าไม่มีข้อมูล ให้สร้างใหม่
-                gameState = { score: 0, goal: 10, logs: [] };
+        function playInstantTone(type) {
+            if(type === 'win') {
+                // เสียง Ping สั้นๆ (High C)
+                playTone(880, 'sine', 0.3);
+            } else if (type === 'fail') {
+                // เสียงอู้วว (Low Sawtooth)
+                playTone(150, 'sawtooth', 0.3);
             }
-            updateDisplay();
-            renderLogs();
         }
+
+        function playFanfare() {
+            // เสียงดนตรีฉลอง (Major Arpeggio: C-E-G-C)
+            const now = 0;
+            const speed = 0.1;
+            playTone(523.25, 'triangle', 0.3, 0);       // Do (C5)
+            playTone(659.25, 'triangle', 0.3, speed);   // Mi (E5)
+            playTone(783.99, 'triangle', 0.3, speed*2); // Sol (G5)
+            playTone(1046.50, 'sine', 0.6, speed*3);    // Do (C6) - ยาวหน่อย
+        }
+
+        // --- DATA ---
+        const DB_KEY = 'StarKids_V_Celeb';
+        let appData = {
+            ongtong: { id: 'ongtong', name: "น้องอองตอง", score: 0, goal: 10, avatar: "👸", cssClass: "card-ongtong" },
+            angtang: { id: 'angtang', name: "น้องแองแตง", score: 0, goal: 10, avatar: "🤴", cssClass: "card-angtang" }
+        };
+        let currentKidId = null;
+
+        // --- INIT ---
+        window.onload = () => {
+            if(localStorage.getItem(DB_KEY)) {
+                const saved = JSON.parse(localStorage.getItem(DB_KEY));
+                if(saved.ongtong) appData.ongtong = {...appData.ongtong, ...saved.ongtong};
+                if(saved.angtang) appData.angtang = {...appData.angtang, ...saved.angtang};
+            }
+            renderDashboard();
+            initConfetti();
+        };
 
         function saveData() {
-            localStorage.setItem(currentUser.storageKey, JSON.stringify(gameState));
-            updateDisplay();
-            renderLogs();
+            localStorage.setItem(DB_KEY, JSON.stringify(appData));
         }
 
-        // Logic เกม
-        function updateScore(value) {
-            let newScore = gameState.score + value;
-            if (newScore < 0) newScore = 0;
-
-            const timestamp = new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
-            const actionText = value > 0 ? "เข้าใกล้ขึ้น" : "ถอยห่างออกไป";
-            
-            const newLog = { time: timestamp, action: actionText, val: value };
-            
-            gameState.score = newScore;
-            gameState.logs.unshift(newLog); 
-            if(gameState.logs.length > 20) gameState.logs.pop(); 
-
-            saveData();
-            checkGoal();
-        }
-
-        function changeGoalTarget() {
-            const inputVal = document.getElementById('goalInput').value;
-            const newGoal = parseInt(inputVal);
-            
-            if(newGoal && newGoal > 0) {
-                if(confirm(`ตั้งค่าเป้าหมายใหม่สำหรับ ${currentUser.name} \nคะแนนจะรีเซ็ตเป็น 0 ยืนยันไหม?`)) {
-                    const timestamp = new Date().toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
-                    gameState.score = 0;
-                    gameState.goal = newGoal;
-                    gameState.logs = [{ time: timestamp, action: "ตั้งเป้าหมายใหม่", val: 0 }];
-                    saveData();
-                }
-            } else {
-                alert("เป้าหมายต้องมากกว่า 0");
-            }
-        }
-
-        function resetData() {
-            if(confirm(`ล้างข้อมูลทั้งหมดของ ${currentUser.name} และเริ่มใหม่?`)) {
-                gameState = { score: 0, goal: 10, logs: [] };
-                document.getElementById('goalInput').value = 10;
-                saveData();
-            }
-        }
-
-        // แสดงผล
-        function updateDisplay() {
-            document.getElementById('score').innerText = gameState.score;
-            document.getElementById('goalInput').value = gameState.goal;
-            document.getElementById('historyTitle').innerText = `สมุดบันทึก (${currentUser.name})`;
-
-            const rider = document.getElementById('riderContainer');
-            let safeDistancePixel = 110; 
-            let progressRatio = gameState.score / gameState.goal;
-            if (progressRatio > 1) progressRatio = 1;
-            if (progressRatio < 0) progressRatio = 0;
-            rider.style.left = `calc((100% - ${safeDistancePixel}px) * ${progressRatio})`;
-        }
-
-        function renderLogs() {
-            const list = document.getElementById('logList');
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            const list = document.getElementById('dashboard-list');
             list.innerHTML = "";
-            gameState.logs.forEach(log => {
-                const li = document.createElement('li');
-                if(log.val === 0) {
-                    li.innerHTML = `<span>🚩 ${log.time} - ${log.action}</span> <span style="color:#aaa;">--</span>`;
-                } else {
-                    const sign = log.val > 0 ? "+" : "";
-                    const colorClass = log.val > 0 ? "positive" : "negative";
-                    const icon = log.val > 0 ? "🌸" : "☁️";
-                    li.innerHTML = `<span>${icon} ${log.time} - ${log.action}</span> <span class="${colorClass}">${sign}${log.val}</span>`;
-                }
-                list.appendChild(li);
+            ['ongtong', 'angtang'].forEach(id => {
+                const kid = appData[id];
+                let starString = "⭐".repeat(kid.score);
+                if(kid.score === 0) starString = "<span class='empty-star-text'>ยังไม่มีดาว</span>";
+
+                const card = document.createElement('div');
+                card.className = `character-card ${kid.cssClass}`;
+                card.onclick = () => selectKid(id);
+                card.innerHTML = `
+                    <div class="avatar">${kid.avatar}</div>
+                    <div class="card-info">
+                        <div class="card-name">${kid.name}</div>
+                        <div class="dashboard-stars">${starString}</div>
+                    </div>
+                `;
+                list.appendChild(card);
             });
         }
 
-        function checkGoal() {
-            if(gameState.score >= gameState.goal && gameState.score > 0) {
-                 if(document.getElementById('celebrationOverlay').style.display !== 'flex') {
-                    showCelebration();
+        function selectKid(id) {
+            currentKidId = id;
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('tracker-view').style.display = 'block';
+            
+            const kid = appData[id];
+            document.getElementById('kid-name-display').innerText = kid.name;
+            document.getElementById('goal-input').value = kid.goal;
+            renderStars();
+        }
+
+        function goHome() {
+            document.getElementById('tracker-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            renderDashboard();
+        }
+
+        // --- TRACKER ---
+        function renderStars() {
+            const kid = appData[currentKidId];
+            const board = document.getElementById('star-board');
+            board.innerHTML = "";
+
+            for(let i=0; i<kid.goal; i++) {
+                const hole = document.createElement('div');
+                hole.className = 'star-hole';
+                const star = document.createElement('div');
+                star.className = 'star-fill';
+                star.innerHTML = '⭐';
+                
+                if(i < kid.score) {
+                    star.classList.add('pop');
+                    star.style.animationDelay = (i * 0.03) + "s";
                 }
+                hole.appendChild(star);
+                board.appendChild(hole);
             }
         }
 
-        // Celebration
-        let fireworkInterval;
-        function showCelebration() {
-            document.getElementById('celebrateMsg').innerText = `ยินดีด้วย!\n${currentUser.winMsg}`;
-            const overlay = document.getElementById('celebrationOverlay');
-            overlay.style.display = 'flex';
-            for(let i=0; i<5; i++) { createFirework(); }
-            fireworkInterval = setInterval(() => { createFirework(); }, 800);
+        function adjustStar(amount) {
+            const kid = appData[currentKidId];
+            if(amount > 0) {
+                if(kid.score < kid.goal) {
+                    kid.score++;
+                    playInstantTone('win');
+                    if(kid.score >= kid.goal) setTimeout(showWin, 200);
+                }
+            } else {
+                if(kid.score > 0) {
+                    kid.score--;
+                    playInstantTone('fail');
+                }
+            }
+            saveData();
+            renderStars();
         }
-        function closeCelebration() {
-            document.getElementById('celebrationOverlay').style.display = 'none';
-            clearInterval(fireworkInterval);
-            document.querySelectorAll('.firework').forEach(fw => fw.remove());
+
+        function saveNewGoal() {
+            const val = parseInt(document.getElementById('goal-input').value);
+            if(val > 0) {
+                appData[currentKidId].goal = val;
+                saveData();
+                renderStars();
+            }
         }
-        function createFirework() {
-            const overlay = document.getElementById('celebrationOverlay');
-            const fw = document.createElement('div');
-            fw.classList.add('firework');
-            fw.style.left = Math.random() * 80 + 10 + '%';
-            fw.style.top = Math.random() * 60 + 10 + '%';
-            const colors = ['#fdfd96', '#ffb3c1', '#b7e4c7', '#a2d2ff', '#ffcaaf'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            fw.style.backgroundColor = randomColor;
-            fw.style.boxShadow = `0 0 20px 5px rgba(255,255,255,0.8)`;
-            overlay.appendChild(fw);
-            setTimeout(() => { fw.remove(); }, 1000);
+
+        function resetCurrentKid() {
+            const kid = appData[currentKidId];
+            if(confirm(`ต้องการลบดาวทั้งหมดของ "${kid.name}" และเริ่มใหม่ไหม?`)) {
+                kid.score = 0;
+                saveData();
+                renderStars();
+            }
         }
+
+        // --- WIN & CONFETTI ---
+        function showWin() {
+            playFanfare(); // เล่นเสียงฉลอง
+            document.getElementById('win-modal').style.display = 'flex';
+            startConfetti();
+        }
+        function closeWin() {
+            document.getElementById('win-modal').style.display = 'none';
+            stopConfetti();
+        }
+
+        // Simple Confetti
+        let confettiCtx;
+        let confettiActive = false;
+        let particles = [];
+
+        function initConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            confettiCtx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function startConfetti() {
+            if(confettiActive) return;
+            confettiActive = true;
+            particles = [];
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight - window.innerHeight,
+                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
+                    size: Math.random() * 8 + 4,
+                    speed: Math.random() * 5 + 3
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            if(!confettiActive) { confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight); return; }
+            confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+            particles.forEach(p => {
+                confettiCtx.fillStyle = p.color;
+                confettiCtx.fillRect(p.x, p.y, p.size, p.size);
+                p.y += p.speed;
+                if(p.y > window.innerHeight) p.y = -10;
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+        function stopConfetti() { confettiActive = false; }
+
     </script>
 </body>
 </html>
